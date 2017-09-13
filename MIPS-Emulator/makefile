@@ -1,5 +1,5 @@
-LOGIN ?= asada
-CPPFLAGS += -W -Wall -g
+LOGIN ?= asad
+CPPFLAGS += -W -Wall -g -o3
 CPPFLAGS += -I include
 
 CFLAGS	 += -std=c99
