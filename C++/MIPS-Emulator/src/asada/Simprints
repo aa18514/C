@@ -1,0 +1,85 @@
+Simprints 
+1 . began as the winning response to a hack-day challenge by one of the world's leading mobile healthcare NGOs, MedicMobile. Targets people in developing countries, people who do not know their DOB. 
+
+2 . free biometric identification systems from laptops or computers and make them mobile based with a rugged hand-held scanner with accompanying software for mobile phones. By using the phone as a computer, fingerprint scans may be translated into unique identification numbers that may be sent via text messaging to servers where health records are kept. 
+
+3. Fingerprint scans are unique to indiviuals and a few additional tags (based on gender/location) can rapidy identify or verify an indivual's identity. For example, with this tech a commpunity health worker can swipe a child's fingerprint, have the worker's phone text message the fingerprint scan to the primary operating server along with some health details, and recieve a text message indicating that the child has recieved polio drops yet is due for a second round of diptheria vaccinations. 
+
+
+4. Steps for security in health care: 
+	a) update HPAA Security Protocol which is similar to PCI DSS rules for debit and credit card security
+	b) provide strong enough encryption to all medical records, organizations should monitor searches and downloads from their IT systems by tracking exfiltrated data such as large batch files of patient, research, financial or other sensitive data. 
+	c) purchase insurance -> similar to cyber insurance -> not clear who bears the cost
+	d) training for personnel 
+	e) strong authentication: OAuth 2.0 
+	f) adopt tokenization
+	g) share industry best practices regarding cybersecurity
+
+Indian Government's Aadhar project, which has created 12-digit unique identity numbers based on biometric and demographic information for nearly the country's 1.2 billion citizens. More than 130 million Aadhar numbers and around 100 million bank numbers of beneficiaries have been leaked online. 
+
+http://www.impactnetwork.org/field-journal/2017/5/20/the-power-of-partnership?utm_content=bufferda272&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer -> power of patnership, Reshma Patel
+
+1. No poverty 
+2. Zero Hunger 
+3. Good Health and well-being 
+4. Quality Education 
+5. Gender Equality
+6. clean water and sanitation
+7. affordable and clean energy 
+8. decent work and economic growth
+
+
+education:
+	Research from MIT has shown that attendance monitoring can cut absenteeism by 20% and boost graduation rates. Partnership with Impact Network in Zambia to improve attendance tracking for teachers and students. 
+
+data collection: 
+	Mobile data collection has 
+
+
+what are some of the challenges that you have to face? How do you cope up with the linguistic barriers in the area? When you initially show the product, what is people's reaction? How long does it take to train the staff and personal? What are the other factors that you take into consideration?
+
+microfinance - microfinance has penetrated nearly all corners of the developing world. However screening borrowers who take multiple loans remains a key industry challenge -> market collapse in Bosnia, Nicargia and Andhra Pradesh, Randomised control trials have shown biometrics can increase repayment rates by 44% to 85%. 
+microfinance institutions can save $25m annually. 
+
+aid distribution: 
+	developing countries lose billions of dollars a year to corruption and the misdistribution of aid. A World Bank study in 2011 found that onl 41% of grain handed out for the poor through Indian food programs reached its intended target, and estimates put the loss of other subsidies at 20% - costing government loss of $10B annually. 
+food -> 
+
+my interests: 
+	developing delicate real time operating systems that can operate under harsh conditions -> magnetometer/motor controller/FPGAs/Programming Ardruinos -> talk about what can be achieved with and what i was involved in? communication between multiple Ardruinos
+
+	optimisation of software 
+	math/signal processing
+	NOT AN EXPERT IN MACHINE LEARNING
+
+	why simprints? 
+	-> inspiration comes from a project I participated during my time at university - one of my favorite modules, perfect blend of theory and application, not an expert in software engineering but I love new challenges - some research questions efficient mapping of software to hardware -> not a trivial task
+	IBM architecture workshop focused at automating the post delivery system UKCS, the presentation focused on ideas such as microservices -> existing bottlenecks, IT architecture that sort of stuff
+
+	After a rigorous review by global health experts, Cambridge startup Simprints was chosen among 15 of the world’s most promising ideas to save lives at birth in developing countries, edging out over 550 other applicants to secure millions in new funding to develop and refine its innovations.
+
+The award comes from Saving Lives at Birth, a 'Grand Challenge for Development' funded by the Gates Foundation, USAID, UKaid, and the Canadian, Korean, and Norwegian governments.
+
+Simprints builds open source software and biometric hardware to empower mobile tools used by researchers, NGOs, and governments fighting poverty around the world.
+
+Simprints has been awarded a $2 million prize to scale its current project covering 22,000 patients in Bangladesh with BRAC – the world’s largest NGO – across 24 districts, reaching 4.85 million mothers and children over the next three years.
+
+Simprints simultaneously received a $250k innovation award to begin R & D on neonate fingerprinting technology that can improve vaccination rates across the developing world.
+
+Cambridge superchip architect and world technology leader Arm, whose technologies reach 80 per cent of the global population, will contribute a further $200k to expand Simprints’ integration with leading global health technology platforms and networks through the 2030Vision initiative.
+
+The initiative led by ARM is a partnership that connects businesses, NGOs and governments to help them to unlock the opportunities technology presents for transforming businesses and improving people’s lives around the world. 
+
+Dominic Vergine (pictured), head of sstainability at Arm says: “Investment in innovation and the partnerships which take technologies to scale is the model both for our core business and our role in sustainable development.
+ 
+“Arm has partnered with Simprints from its earliest days providing engineering support, funding and mentorship, and joining our 2030Vision initiative will help it reach global scale and support millions of healthcare workers in years to come.”
+
+Simprints has developed biometric technology that is 228 per cent more accurate with the scarred, worn fingerprints typical of ‘last mile’ beneficiaries.
+
+It empowers already existing mobile tools used by NGOs and governments to deliver essential services like healthcare at the frontlines. Its goal is to radically disrupt the inaccurate way we currently track and deliver social impact, instead building a world where every person – not based on guesswork – actually counts in the fight against poverty.
+
+Simprints works with world leaders in development including UNICEF, Johns Hopkins University, BRAC, and multiple governments to improve service delivery in the hardest-to-reach regions of the world. 
+
+The Saving Lives at Birth partnership, launched in 2011, includes the U.S. Agency for International Development (USAID), the Norwegian Agency for Development Cooperation (Norad), the Bill & Melinda Gates Foundation, Grand Challenges Canada (funded by the Government of Canada), the UK’s Department for International Development (DFID) and the Korea International Cooperation Agency (KOICA).
+
+It is a global call for groundbreaking, scalable solutions to end infant and maternal mortality around the time of birth. Saving Lives at Birth aims to address the 303,000 maternal deaths, 2.7 million neonatal deaths, and 2.6 million stillbirths that occur each year around the world.
