@@ -5,10 +5,13 @@
 #include <fstream>
 #include <algorithm>
 #include "keyboard.h"
+#include "active_window_title.h"
 #include "mouse.h"
 #include "IE.h"
 #include "registry.h"
 #include "adobe.h"
+#include "active_window_title.h"
+
 #define DIFFERENT_COORDINATES   !((p.x == new_p.x) && (p.y == new_p.y)
 #define ACTIVE_WINDOW_TITLE_MAXSIZE 1000
 #define MS_WORD active_window_title.find("Word") != string::npos
@@ -26,63 +29,59 @@ int main(){
     ifstream text_filer2("text.csv");
     ofstream text_file;
     text_file.open("text.csv", ios::out| ios::app);
-    string result, active_window_title, url;
+    string result, active_window, url;
     POINT p, new_p;
     HWND hwnd;
     string t; 
     if(text_filer2.peek() == std::ifstream::traits_type::eof())
         text_file << "date time , active window title , highlighted text , location" << endl;
-    while(true){
+    while(1){
             while(!left_click());
             GetCursorPos(&p);
             while(left_click());
             GetCursorPos(&new_p);
             /*already registered the left_click, so check to see if coordinates when the button was clicked and released are different*/
-            if(DIFFERENT_COORDINATES)){ 
-                    hwnd = GetForegroundWindow();
-                    active_window_title = GetActiveWindowTitle(hwnd); 
-                     if(ACTIVE_WINDOW_TITLE){
-                        /*for more information refer to keyboard.cpp*/
-                        Sleep(2);
-                        user_keyboard.send_ctrl_c();
-                    
-                        if( OpenClipboard(NULL) && IsClipboardFormatAvailable(CF_TEXT)){ 
-                            t = get_timestamp();
-                            t.erase(t.length() - 1);
-                            text_file << t + ',' + active_window_title + ',' + get_clipboard_data();      
-                            CloseClipboard(); 
-                        }    
-                        if(IE){
-                           text_file << ',' + get_ie_url(hwnd) << endl;
-                        }
-                        else if(CHROME){
-                            user_keyboard.send_ctrl_l_c();
-                            if(OpenClipboard(NULL) && IsClipboardFormatAvailable(CF_TEXT)){
-                                url = get_clipboard_data();  
-                                text_file <<',' +  url << endl;
-                                CloseClipboard(); 
-                            }
-                        }
-                        else if(ADOBE){
-                            int pos = active_window_title.find_last_of(".");
-                            string filename = active_window_title.substr(1, pos - 1);
-                            string path = get_query( "SOFTWARE\\Adobe\\Acrobat Reader\\11.0\\AVGeneral\\CRecentFiles\\", filename);
-                            text_file << ',' << path << endl;
-                            cout << path << endl;
-                        }
-                        else if(MS_WORD){
-                            /*
+            hwnd = GetForegroundWindow();
+            active_window_title = GetActiveWindowTitle(hwnd);         
+            if(DIFFERENT_COORDINATES && ACTIVE_WINDOW_TITLE){
+                active_window_title* a; 
+                if(active_window.find("Word") != string::npos)
+                    a = new word()
+                else if(active_window.find("Chrome") != string::npos)
+                    a = new chrome()
+                else if(active_window.find("Internet Explorer") != string::npos)
+                    a = new ie()
+                string loc = a -> get_location();
+                string t = get_timestamp()
+
+                Sleep(2);
+                user_keyboard.send_ctrl_c();    
+                if( OpenClipboard(NULL) && IsClipboardFormatAvailable(CF_TEXT)){ 
+                    t.erase(t.length() - 1);
+                    text_file << t + ',' + active_window_title + ',' + get_clipboard_data();      
+                    CloseClipboard(); 
+                }    
+                if(IE)
+                    text_file << ',' + loc << endl;
+                else if(ADOBE){
+                    int pos = active_window_title.find_last_of(".");
+                    string filename = active_window_title.substr(1, pos - 1);
+                    string path = get_query( "SOFTWARE\\Adobe\\Acrobat Reader\\11.0\\AVGeneral\\CRecentFiles\\", filename);
+                    text_file << ',' << path << endl;
+                    cout << path << endl;
+                }
+                else if(MS_WORD){
+                    /*
                             string path = get_query( "SOFTWARE\\Microsoft\\Office\\16.0\\Word\\Reading Locations\\", active_window_title);
                             text_file << ',' << path << endl;
                             cout << path << endl;
                             */
-                        }
-                        else{
-                            text_file << endl; 
-                        }
-                    }
-                }                    
+                }
+                else{
+                    text_file << endl; 
+                }
             }
+        }                    
     return 0; 
     }
 

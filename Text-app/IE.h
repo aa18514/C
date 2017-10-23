@@ -2,7 +2,11 @@
 #define	IE_H
 #include <Windows.h>
 #include <String>
+#include "active_window_title.h"
 using namespace std;
-string get_ie_url(HWND hwnd);
-string get_adobe_page_number(HWND hwnd);
+class ie:public active_window_title{
+public: 
+	ie(){}
+	string get_location(HWND hwnd); 
+}
 #endif
