@@ -29,6 +29,7 @@ int main(int argc, char* argv[])
 		multi_core_answer = multi_core_implementation(strtod(argv[3], NULL), atof(argv[4]), atoi(argv[5]), atoi(argv[6])); 
 		cout << multi_core_answer << endl;
 		cout << naive_answer << endl;
+		cout << "number of processors: " << omp_get_num_procs() << endl;
 	}
 	return 0; 
 }
