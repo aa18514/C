@@ -8,8 +8,17 @@
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
+#include "parallel_accumulator.h"
 
-using namespace std; 
+typedef int Item;
+
+struct Node{
+	Item dataSize;	
+	double* data; 
+	Node* Next; 
+};
+
+typedef Node* NodePtr;
 
 double naive_implementation(long double num_steps, int experiments);
 double multi_core_implementation(long double num_steps, double scaling_factor, float total_experiments, int C); 
@@ -25,11 +34,9 @@ int main(int argc, char* argv[])
 	}
 	else{
 		naive_answer = naive_implementation(strtod(argv[1], NULL), atoi(argv[2])); 
-		
 		multi_core_answer = multi_core_implementation(strtod(argv[3], NULL), atof(argv[4]), atoi(argv[5]), atoi(argv[6])); 
 		cout << multi_core_answer << endl;
 		cout << naive_answer << endl;
-		cout << "number of processors: " << omp_get_num_procs() << endl;
 	}
 	return 0; 
 }
@@ -68,45 +75,58 @@ inline double multi_core_implementation(long double num_steps, double scale_fact
 		gettimeofday(&tv, NULL); 
 		int iterations = int(double(scale_factor) * double(num_steps));
 		int size = (1.0/double(scale_factor));
+		NodePtr hdlist = new Node;
+		for(int i = 0; i < 6; i++){
+			
+			cout << i << endl;
+			int index = (i == 0) ? 2 : 
+						i + 3; 	 
+			if(i == 0){
+				hdlist -> data = new double[iterations >> index];
+				hdlist -> dataSize = iterations >> i;
+				hdlist -> Next = NULL;
+			}
+			else{
+				NodePtr nextNode = new Node;
+				nextNode -> data = new double[iterations >> index];
+				nextNode -> dataSize = int(iterations >> i);
+				nextNode -> Next = hdlist;
+				hdlist = nextNode;
+			}
+
+		} 
+		cout << "MERRY CHRISTMAS" << endl;
 		double* level_up_sums = new double[size];
-		double* partial_sums = new double[iterations >> 2];
-		int iterations_level_up = iterations >> 3;
-		double* partial_sum_two_levels_up = new double[iterations_level_up >> 1];
-		int iteration_two_level_up = iterations_level_up >> 1; 
-		double* partial_sum_three_levels_up = new double[iteration_two_level_up >> 1]; 
-		double* partial_sums_level_up = new double[iterations >> 3]; 
-		int iteration_three_level_up = iteration_two_level_up >> 1; 
-		double* partial_sum_four_level_up = new double[iteration_three_level_up >> 1];
-		int iteration_four_level_up = iteration_three_level_up >> 1; 
-		double* partial_sum_five_level_up = new double[iteration_four_level_up >> 1];
-		int iterations_factor = iterations % 2; 
-		int iterations_level_up_factor = iterations_level_up % 2; 
-		int iterations_two_level_up_factor = iteration_two_level_up % 2;
-		int iterations_three_level_up_factor = iteration_three_level_up % 2;
-		int iterations_four_level_up_factor = iteration_four_level_up % 2;   
+
+		int iterations_factor = hdlist -> Next -> Next -> Next -> Next -> dataSize % 2; 
+		int iterations_level_up_factor = hdlist -> Next -> Next -> Next -> dataSize % 2; 
+		int iterations_two_level_up_factor = (hdlist -> Next -> Next -> dataSize) % 2;
+		int iterations_three_level_up_factor = hdlist -> Next -> Next -> dataSize % 2;
+		int iterations_four_level_up_factor = hdlist -> dataSize % 2;   
+
 		for(int64_t j = 0; j < size; j++)
 		{
-			bring_data_in_block(partial_sums, j * iterations, iterations, step);
-			
-			level_up_sums[j] += (!iterations_factor) ? 0 : partial_sums[iterations >> 2 - 1];
-			reduce(partial_sums_level_up, partial_sums, iterations >> 1);
-			
-			level_up_sums[j] += (!iterations_level_up_factor) ? 0 : partial_sums_level_up[iterations_level_up - 1];
-			reduce(partial_sum_two_levels_up, partial_sums_level_up, iterations >> 2);
-			
-			level_up_sums[j] += (!iterations_two_level_up_factor) ? 0 : partial_sum_two_levels_up[iteration_two_level_up - 1];
-			reduce(partial_sum_three_levels_up, partial_sum_two_levels_up, iterations >> 3);
-
-			level_up_sums[j] += (!iterations_three_level_up_factor) ? 0 : partial_sum_three_levels_up[iteration_three_level_up - 1];
-			reduce(partial_sum_four_level_up, partial_sum_three_levels_up, iterations >> 4);
-			
-			level_up_sums[j] += (!iterations_four_level_up_factor) ? 0 : partial_sum_four_level_up[iteration_four_level_up - 1];
-			reduce(partial_sum_five_level_up, partial_sum_four_level_up, iterations >> 5);
+			bring_data_in_block(hdlist -> Next -> Next -> Next -> Next -> Next -> data, j * hdlist -> Next-> Next -> Next -> Next -> Next -> dataSize, hdlist -> Next -> Next -> Next -> Next -> Next -> dataSize, step);
 	
-			level_up_sums[j] += (iteration_four_level_up > 1) ? accumulate(partial_sum_five_level_up, partial_sum_five_level_up + (iteration_four_level_up >> 1), double(0)) : 
-					    (iteration_three_level_up > 1) ? partial_sum_four_level_up[0] : 
-					    (iteration_two_level_up > 1) ? partial_sum_three_levels_up[0] :
-					    partial_sum_two_levels_up[0];
+			level_up_sums[j] += (!iterations_factor) ? 0 : hdlist -> data[(hdlist -> Next -> Next -> Next -> Next -> Next -> dataSize) >> 2 - 1];
+			reduce(hdlist -> Next -> Next -> Next -> Next -> data , hdlist -> Next -> Next -> Next -> Next -> Next -> data, hdlist -> Next -> Next -> Next -> Next -> dataSize);
+			
+			level_up_sums[j] += (!iterations_level_up_factor) ? 0 : hdlist->Next->Next->Next->data[(hdlist->Next->Next->Next->dataSize) >> 2 - 1];
+			reduce(hdlist -> Next -> Next -> Next -> data, hdlist -> Next -> Next -> Next->Next->data, hdlist -> Next -> Next -> Next -> Next -> dataSize);
+			
+			level_up_sums[j] += (!iterations_two_level_up_factor) ? 0 : hdlist->Next->Next->data[(hdlist -> Next -> Next -> dataSize) >> 2 - 1];
+			reduce(hdlist -> Next -> Next -> data, hdlist -> Next -> Next -> Next -> data, hdlist -> Next -> Next -> Next -> dataSize);
+			
+			level_up_sums[j] += (!iterations_three_level_up_factor) ? 0 : hdlist->Next->Next->Next->data[(hdlist -> Next -> dataSize) >> 2 - 1];
+			reduce(hdlist -> Next -> data, hdlist -> Next -> data, hdlist -> Next -> Next -> dataSize);
+			
+			level_up_sums[j] += (!iterations_four_level_up_factor) ? 0 : hdlist->data[(hdlist -> dataSize) >> 2 - 1];
+			reduce(hdlist -> data, hdlist->Next->data, hdlist->dataSize);
+	
+			level_up_sums[j] += (hdlist -> dataSize > 1) ? accumulate(hdlist -> data, hdlist -> data + hdlist -> dataSize, double(0)) : 
+					    (hdlist -> Next -> dataSize > 1) ? hdlist -> Next -> data[0] : 
+					    (hdlist -> Next -> Next -> dataSize > 1) ? hdlist -> Next -> Next -> data[0] :
+					    hdlist -> Next -> Next -> Next -> data[0];
 		}
 		
 		sum = (size == 1) ? level_up_sums[0] : 
